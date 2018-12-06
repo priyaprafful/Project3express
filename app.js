@@ -40,6 +40,7 @@ app.use(cors({
   // the array of domains/origins we want cookies from (just the React app)
   origin: [ "http://localhost:3000" ]
 }));
+
 app.use(session({
   secret: "y$NmzX8e7K279/h](jdNhyjahxQ2wnq*#Lznn9B(Vr",
   resave: true,
@@ -48,9 +49,6 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-
-
 
 
 const authRouter = require("./routes/auth-router.js");
