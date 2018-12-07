@@ -32,6 +32,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // Allow Cross-Origin Resource Sharing (CORS)
 // (allows access to the API from the frontend JS on a different domain/origin)
 app.use(cors({
@@ -47,15 +48,24 @@ app.use(session({
   saveUninitialized: true,
   store: new MongoStore({ mongooseConnection: mongoose.connection }),
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+// app.use(function(req, res, next){
+//   res.locals.user = req.user;
+//   console.log("req.user in app.js ::", req.user);
+  
+//   next();
+// });
 const authRouter = require("./routes/auth-router.js");
 app.use("/api", authRouter);
 
 const productRouter=require("./routes/product-router.js");
-app.use("/api",productRouter),
+app.use("/api",productRouter);
 
+ const cartRouter=require("./routes/cart-router.js");
+ app.use("/api",cartRouter);
 
-module.exports = app;
+ module.exports = app;
+
