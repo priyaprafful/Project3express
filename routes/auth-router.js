@@ -30,9 +30,10 @@ router.post("/signup", (req, res, next) => {
       //const {userId} = userDoc.email;
       //console.log("userId  ",email);
       const user = userDoc;
+      const cartTotal = 0;
       // Log in the user automatically when they sign up
       //the first parameter user must have the same name as it is in its corresponding model schema, else it will error as user validation required.
-      Cart.create({user,products}).then(cartEntry=>{
+      Cart.create({user,products,cartTotal}).then(cartEntry=>{
         //console.log("i am here 5");
         //console.log("cart entry is created", cartEntry);
       }).catch(err => next(err));
