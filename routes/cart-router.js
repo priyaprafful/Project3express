@@ -6,9 +6,10 @@ const router = express.Router();
 
 router.post("/addtocart", (req,res,next)=>{
     console.log("req.params   ::::::",req.body);
-    const {key,price,user}  = req.body;
+    const {key,price}  = req.body;
     console.log("key is :::",key);
-    console.log("loggedInUser :::",user);
+    console.log("loggedInUser :::",req.user);
+    const user = req.user;
     console.log("here we start............")
     if(user!=undefined){
         Carts.findOne({user:{$eq:user}})
