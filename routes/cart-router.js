@@ -16,7 +16,8 @@ router.post("/addtocart", (req,res,next)=>{
             if(cartEntry){
                 console.log("cart is",cartEntry);
                 cartEntry.products.push(key+"|"+name+"|"+image+"|"+price); 
-                cartEntry.cartTotal = cartEntry.cartTotal +price;              
+                cartEntry.cartTotal = cartEntry.cartTotal +price;    
+                cartEntry.cartTotal = cartEntry.cartTotal.toFixed(2);  
                 console.log("cart is",cartEntry);
             }
             Carts.update({user: user}, {
@@ -31,27 +32,6 @@ router.post("/addtocart", (req,res,next)=>{
     }
 })
 
-//   router.post("/myproducts",(req,res,next)=>{
-//     console.log("inside myproducts", req.body);
-            
-//       const {loggedInUser} = req.body;
-//       if(loggedInUser!=undefined){
-//           Carts.findOne({user:{$eq:loggedInUser}})
-//           .then(cart=>{
-//               var numberOfProducts=cart.products.length;
-//             console.log("numberOfProduct is :::",numberOfProducts);
-//             //res.locals.numberOfProducts = numberOfProducts;
-            
-//             res.json({"numbers":numberOfProducts});
-//             res.json({"numbers":10});
-
-//         })
-//           .catch(err=>next(err));
-
-//           }
-      
-// })
-
 
 router.post("/myproducts",(req,res,next)=>{
     console.log("inside myproducts", req.user);
@@ -60,6 +40,7 @@ router.post("/myproducts",(req,res,next)=>{
         .then(cart=>{
             var numberOfProducts=cart.products.length;
             var cartProducts = cart.products;
+            var cartTotal = cart.cartTotal;
             console.log("cart products----------------------------------", cartProducts);
 
             console.log("numberOfProduct is :::---------------------------",numberOfProducts);
@@ -84,34 +65,49 @@ router.post("/myproducts",(req,res,next)=>{
 
             var jsonStr = JSON.stringify(jsonObj);
             console.log("json str   :::: ",jsonStr);
-            res.json({"numbers":numberOfProducts, "products":jsonStr });
+            res.json({"numbers":numberOfProducts, "products":jsonStr ,"cartTotal":cartTotal});
         })
         .catch(err=>next(err));
     }
 })
-// router.post("/cartitems",(req,res,next)=>{
-//     if(req.user!=undefined){
-//         console.log("inside cart items in cart router", req.user);
-//         Carts.findOne({user:{$eq:req.user._id}})
-//             .then(cart=>{
-//                 var products = cart.products;
-//                 console.log(products);
-//                 var productsArray = [];
-//                 var productcount = 0;
-//                 products.forEach(product => {
-//                     productcount++;
-//                     console.log(productcount);
-//                     Products.findById(product).then(productDoc=>{
-//                         console.log("----------------------product ", productcount);
-//                         //console.log(productDoc);
-//                         productsArray.push(productDoc);                
-//                         //console.log("productsJson till now ", productsJson);                    
-//                     }).catch(err=>next(err));                
-//                 });
-//                 console.log("----------------------------------ENd of for each loop of finding products in cart items----------------");                
-//                 console.log("productsArray    ::::::::",productsArray );
-//                 res.json({"products":productsArray});
-//         }).catch(err=>next(err));
-//     }
-// })
+
+function arrayRemove(arr, value) {
+
+    return arr.filter(function(ele){
+        return ele != value;
+    });
+ 
+ }
+router.post("/removeFromcart", (req,res,next)=>{
+
+    console.log("inside remove from cart");
+    console.log("req.params   ::::::",req.body);
+    const {productString,price}  = req.body;
+    const user = req.user;
+    console.log("here we start to remove ............")
+    if(user!=undefined){
+        Carts.findOne({user:{$eq:user}})
+        .then(cartEntry=>{
+            console.log("cart found");
+            if(cartEntry){
+                console.log("cart before remove is ::::::",cartEntry);
+                cartEntry.products = arrayRemove(cartEntry.products,productString); 
+                cartEntry.cartTotal = cartEntry.cartTotal -price;     
+                cartEntry.cartTotal = cartEntry.cartTotal.toFixed(2);         
+                console.log("cart after deletion is ::::::",cartEntry.products);
+            }
+            Carts.updateOne({user: user}, {
+                products: cartEntry.products,
+                cartTotal: cartEntry.cartTotal
+            }, function(err, affected, resp) {
+               console.log(resp);
+            })
+            
+        })
+        .catch(err=>next(err));
+        res.send("/showcart");
+    }
+    //apply redirect to in else
+})
+
 module.exports= router;
