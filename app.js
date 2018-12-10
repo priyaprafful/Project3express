@@ -67,5 +67,9 @@ app.use("/api",productRouter);
  const cartRouter=require("./routes/cart-router.js");
  app.use("/api",cartRouter);
 
+ const orderRouter=require("./routes/order-router.js");
+ app.use("/api",orderRouter);
+
+
  module.exports = app;
 
