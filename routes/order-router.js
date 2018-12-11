@@ -9,10 +9,9 @@ router.post("/place-order", (req,res,next)=>{
     const user = req.user;
     console.log("here we start in placing order   ............")
     if(user!=undefined){
-        Orders.create({user,shippingName,shippingAddress,shippingMobile, orderedProducts}).
-        then(orderEntry=>{
+        Orders.create({user,shippingName,shippingAddress,shippingMobile, orderedProducts})
+        .then(orderEntry=>{
             console.log("order is placed and ordre id is , ",orderEntry._id);
-
             Carts.findOne({user:{$eq:user}})
             .then(cartEntry=>{
             console.log("cart found in place order");
@@ -22,14 +21,15 @@ router.post("/place-order", (req,res,next)=>{
                 cartEntry.cartTotal = 0;    
                 console.log("cart is",cartEntry);
             //}
-            Carts.update({user: user}, {
-                products: cartEntry.products,
-                cartTotal: cartEntry.cartTotal
-            }, function(err, affected, resp) {
-               console.log(resp); //copy pasted
+                Carts.updateOne(
+                    {user: user},
+                    {products: cartEntry.products,
+                    cartTotal: cartEntry.cartTotal},
+                )
+                .then(response => res.json({"orderId": orderEntry._id}))
+                .catch(err => next(err))
             })
-        })
-        res.json({"orderId": orderEntry._id});
+            .catch(err =>next(err))
         }).catch(err => next(err));
         //res.send("/homePage"); //new thing learned
     }
