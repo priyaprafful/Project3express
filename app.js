@@ -15,7 +15,7 @@ require("./config/passport-setup.js");
 
 mongoose
   .connect(
-    "mongodb://localhost/project-3",
+    process.env.MONGODB_URI,
     { useNewUrlParser: true }
   )
   .then(x => {
@@ -49,7 +49,7 @@ app.use(
 
 app.use(
   session({
-    secret: "y$NmzX8e7K279/h](jdNhyjahxQ2wnq*#Lznn9B(Vr",
+    secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
     store: new MongoStore({ mongooseConnection: mongoose.connection })

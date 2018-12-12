@@ -4,7 +4,7 @@ const Products = require("../models/product-model.js");
 
 mongoose
   .connect(
-    "mongodb://localhost/project-3",
+    process.env.MONGODB_URI,
     { useNewUrlParser: true }
   )
   .then(x => {
