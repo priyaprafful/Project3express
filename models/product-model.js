@@ -13,8 +13,13 @@ const productSchema = new Schema(
     description: { type: String, required: true },
     name: { type: String, required: true },
     size: [{ type: String, required: true }],
-    isFreeShipping: { type: Boolean, required: true },
-    isVerified: { type: Boolean, required: true }
+    productOwner: { type: Schema.Types.ObjectId },
+    // isFreeShipping: { type: Boolean, required: true }
+    isVerified: {
+      type: String,
+      enum: ["verified", "notverified", "refused"],
+      default: "notverified"
+    }
   },
   {
     timeStamps: true

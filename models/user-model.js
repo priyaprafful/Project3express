@@ -20,10 +20,14 @@ const userSchema = new Schema(
     encryptedPassword: { type: String, required: true },
     role: {
       type: String,
-      enum: ["normal", "admin"],
-      enum: ["seller", "client"],
+      enum: ["normal", "admin", "seller", "client"],
       required: true,
       default: "normal"
+    },
+    isVerified: {
+      type: String,
+      enum: ["verified", "notverified"],
+      default: "notverified"
     }
   },
   {

@@ -77,4 +77,9 @@ app.use("/api", cartRouter);
 const sellerRouter = require("./routes/seller-router.js");
 app.use("/api", sellerRouter);
 
+const adminRouter = require("./routes/admin-router.js");
+app.use("/api", adminRouter);
+
+const fileRouter = require("./routes/file-router.js");
+app.use("/api", fileRouter);
 module.exports = app;
