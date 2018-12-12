@@ -8,22 +8,22 @@ const router = express.Router();
 
 router.post("/signup", (req, res, next) => {
   const { fullName, email, originalPassword } = req.body;
-  console.log("I am here 1");
+  //console.log("I am here 1");
 
   if (!originalPassword || originalPassword.match(/[0-9]/) === null) {
     // show error JSON if password is empty or doesn't have a number
     next(new Error("Password can't be blank and must contain a number."));
     return;
   }
-  console.log("I am here 2");
+  //console.log("I am here 2");
 
   // encrypt the submitted password before saving
   const encryptedPassword = bcrypt.hashSync(originalPassword, 10);
-  console.log("I am here 3");
+  //console.log("I am here 3");
 
   User.create({ fullName, email, encryptedPassword })
     .then(userDoc => {
-      console.log("i am here 4 ");
+      //console.log("i am here 4 ");
       var products = [];
       //const {userId} = userDoc._id;
       //console.log(" userid in sign up is ::::",userDoc);

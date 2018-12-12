@@ -79,6 +79,10 @@ app.use("/api", sellerRouter);
 
 const adminRouter = require("./routes/admin-router.js");
 app.use("/api", adminRouter);
+const orderRouter = require("./routes/order-router.js");
+app.use("/api", orderRouter);
+
+module.exports = app;
 
 const fileRouter = require("./routes/file-router.js");
 app.use("/api", fileRouter);
