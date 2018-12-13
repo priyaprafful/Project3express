@@ -19,4 +19,11 @@ Router.get("/products/:id", (req, res, next) => {
     .catch(err => next(err));
 });
 
+Router.get("/alltheproducts", (req, res, next) => {
+  Products.find()
+    //send the query results as a JSON response to the client
+    .then(productResults => res.json(productResults))
+    .catch(err => next(err));
+});
+
 module.exports = Router;
