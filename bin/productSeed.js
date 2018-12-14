@@ -1,5 +1,4 @@
 
-
 const mongoose = require("mongoose");
 
 const Products = require("../models/product-model.js");
